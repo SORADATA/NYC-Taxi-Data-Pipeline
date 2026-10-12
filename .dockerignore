@@ -6,3 +6,9 @@ logs/
 .venv
 airflow.db
 airflow.cfg
+data/
+*.duckdb
+*.duckdb.wal
+.git
+logs/
+target/
