@@ -1,0 +1,12 @@
+taxi_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../taxi.duckdb
+      schema: main
+      threads: 4
+    prod:
+      type: duckdb
+      path: ../taxi_prod.duckdb
+      threads: 4

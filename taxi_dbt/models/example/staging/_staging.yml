@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: stg_trips
+    description: "Trajets taxis jaunes nettoyés (renommage, types, règles de validité)."
+    columns:
+      - name: pickup_at
+        description: "Date et heure de prise en charge."
+        data_tests:
+          - not_null
+      - name: total_amount
+        data_tests:
+          - not_null
