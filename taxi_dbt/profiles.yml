@@ -6,7 +6,5 @@ taxi_dbt:
       path: ../taxi.duckdb
       schema: main
       threads: 4
-    prod:
-      type: duckdb
-      path: ../taxi_prod.duckdb
-      threads: 4
+      
+      
