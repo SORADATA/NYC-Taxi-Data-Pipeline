@@ -15,7 +15,7 @@ routes as (
     select
         t.pickup_location_id,
         pul.borough as pickup_borough,
-        pul.zone as pickup_zone
+        pul.zone as pickup_zone,
 
         t.dropoff_location_id,
         dol.borough as dropoff_borough,
