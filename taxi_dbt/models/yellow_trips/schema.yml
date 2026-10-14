@@ -1,21 +1,26 @@
-
 version: 2
 
 models:
-  - name: 
-    description: "A starter dbt model"
+  - name: stg_trip
+    description: "Données nettoyées et standardisées des trajets de yellow taxi de NYC."
+    
     columns:
-      - name: id
-        description: "The primary key for this table"
+      - name: pickup_at
+        description: "Date et heure de prise en charge du passager."
         data_tests:
-          - unique
           - not_null
 
-  - name: my_second_dbt_model
-    description: "A starter dbt model"
-    columns:
-      - name: id
-        description: "The primary key for this table"
+      - name: dropoff_at
+        description: "Date et heure de dépose du passager."
         data_tests:
-          - unique
+          - not_null
+
+      - name: distance_miles
+        description: "Distance totale du trajet en miles."
+        data_tests:
+          - not_null
+
+      - name: total_amount
+        description: "Montant total payé pour la course."
+        data_tests:
           - not_null

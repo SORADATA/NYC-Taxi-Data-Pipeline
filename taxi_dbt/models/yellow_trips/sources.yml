@@ -3,7 +3,6 @@ version: 2
 sources:
   - name: yellow_taxi_nyc
     tables:
-      # Table existante pour les trajets (Parquet)
       - name: raw_yellow_data
         meta:
           external_location: >-
@@ -13,9 +12,3 @@ sources:
                 m -> 'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-' || lpad(m::VARCHAR, 2, '0') || '.parquet'
               )
             )
-
-      # Table dynamique pour les zones (CSV)
-      - name: raw_taxi_zones
-        meta:
-          external_location: >-
-            read_csv_auto('https://d37ci6vzurychx.cloudfront.net/misc/taxi+_zone_lookup.csv')

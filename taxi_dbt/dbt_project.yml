@@ -17,6 +17,6 @@ models:
   taxi_dbt:
     yellow_trips:
       staging:
-       +materialized: view
+        +materialized: view
       marts:
-       +materialized: table
+        +materialized: table
