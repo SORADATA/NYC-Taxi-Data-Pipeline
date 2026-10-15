@@ -1,13 +1,14 @@
 with source as (
-    select * from {{ source('raw_nyc_taxi', 'raw_yellow_trips') }}
+    select *
+    from {{ source('raw_yellow_trips', 'raw_yellow_trips') }}
 ),
 
 renamed as (
     select
         -- Identifiants
-        VendorID as vendor_id,
-        PULocationID as pickup_location_id,
-        DOLocationID as dropoff_location_id,
+        "VendorID" as vendor_id,
+        "PULocationID" as pickup_location_id,
+        "DOLocationID" as dropoff_location_id,
 
         -- Horodatages
         cast(tpep_pickup_datetime as timestamp) as pickup_datetime,
@@ -15,23 +16,25 @@ renamed as (
 
         -- Métriques de trajet
         cast(passenger_count as integer) as passenger_count,
-        cast(trip_distance as double) as trip_distance,
-        cast(RatecodeID as integer) as rate_code_id,
+        cast(trip_distance as double precision) as trip_distance,
+        cast("RatecodeID" as integer) as rate_code_id,
 
         -- Attributs de trajet
         store_and_fwd_flag,
 
         -- Informations financières
         cast(payment_type as integer) as payment_type,
-        cast(fare_amount as double) as fare_amount,
-        cast(extra as double) as extra,
-        cast(mta_tax as double) as mta_tax,
-        cast(tip_amount as double) as tip_amount,
-        cast(tolls_amount as double) as tolls_amount,
-        cast(improvement_surcharge as double) as improvement_surcharge,
-        cast(total_amount as double) as total_amount,
-        cast(congestion_surcharge as double) as congestion_surcharge,
-        cast(Airport_fee as double) as airport_fee
+        cast(fare_amount as double precision) as fare_amount,
+        cast(extra as double precision) as extra,
+        cast(mta_tax as double precision) as mta_tax,
+        cast(tip_amount as double precision) as tip_amount,
+        cast(tolls_amount as double precision) as tolls_amount,
+        cast(improvement_surcharge as double precision)
+            as improvement_surcharge,
+        cast(total_amount as double precision) as total_amount,
+        cast(congestion_surcharge as double precision)
+            as congestion_surcharge,
+        cast("Airport_fee" as double precision) as airport_fee
 
     from source
 ),
@@ -41,7 +44,7 @@ transformed as (
         *,
 
         -- Libellé du fournisseur
-        case 
+        case
             when vendor_id = 1 then 'Creative Mobile Technologies, LLC'
             when vendor_id = 2 then 'Curb Mobility, LLC'
             when vendor_id = 6 then 'Myle Technologies Inc'
@@ -49,8 +52,8 @@ transformed as (
             else 'Other_vendor'
         end as vendor_name,
 
-        -- Libellé du code tarifaire (RatecodeID)
-        case 
+        -- Libellé du code tarifaire
+        case
             when rate_code_id = 1 then 'Standard rate'
             when rate_code_id = 2 then 'JFK'
             when rate_code_id = 3 then 'Newark'
@@ -62,23 +65,24 @@ transformed as (
         end as rate_code_description,
 
         -- Libellé d'indicateur de stockage et retransmission
-        case 
+        case
             when store_and_fwd_flag = 'Y' then 'Store and forward trip'
             when store_and_fwd_flag = 'N' then 'Not a store and forward trip'
             else 'Unknown'
         end as store_and_fwd_label,
 
         -- Libellé du type de paiement
-        case 
+        case
             when payment_type = 1 then 'Credit Card'
             when payment_type = 2 then 'Cash'
-            else 'Other' 
+            else 'Other'
         end as payment_method,
-        
-        -- Calcul du pourcentage de pourboire
-        case 
-            when payment_type = 1 then tip_amount / NULLIF(fare_amount, 0) 
-            else 0 
+
+        -- Ratio pourboire / montant de la course
+        case
+            when payment_type = 1
+                then tip_amount / nullif(fare_amount, 0)
+            else 0
         end as tip_percentage
 
     from renamed
@@ -93,7 +97,9 @@ filtered as (
 ),
 
 final as (
-    select * from filtered
+    select *
+    from filtered
 )
 
-select * from final
+select *
+from final

@@ -1,10 +1,10 @@
 /*
-     Suivi Économique & Performance Globale : 
-
+    Suivi Économique & Performance Globale :
 */
 
 with trips as (
-    select * from {{ ref('stg_trip') }}
+    select *
+    from {{ ref('stg_trip') }}
 ),
 
 daily_aggregation as (
@@ -22,5 +22,6 @@ daily_aggregation as (
     group by cast(pickup_datetime as date)
 )
 
-select * from daily_aggregation
+select *
+from daily_aggregation
 order by trip_date

@@ -1,14 +1,16 @@
 /*
-     Gestion des Flux de Circulation : 
+     Gestion des Flux de Circulation :
      - Identifie les corridors de transport saturés pour orienter la gestion des voies réservées aux Taxis/VTC.
 */
 
 with trips as (
-    select * from {{ref('stg_trip')}}
+    select *
+    from {{ ref('stg_trip') }}
 ),
 
 zones as (
-    select * from {{ref('stg_taxi_zones')}}
+    select *
+    from {{ ref('stg_taxi_zones') }}
 ),
 
 road as (
@@ -22,16 +24,18 @@ road as (
         dol.zone as dropoff_zone,
 
         count(*) as total_trips,
-        round(avg(t.trip_distance), 2) as avg_distance_miles,
-        round(avg(t.total_amount), 2) as avg_total_amount
+        round(avg(t.trip_distance)::numeric, 2) as avg_distance_miles,
+        round(avg(t.total_amount)::numeric, 2) as avg_total_amount
 
     from trips t
     left join zones pul
-      on t.pickup_location_id = pul.location_id
+        on t.pickup_location_id = pul.location_id
     left join zones dol
-       on t.dropoff_location_id = dol.location_id
+        on t.dropoff_location_id = dol.location_id
+
     group by 1, 2, 3, 4, 5, 6
 )
 
-select * from road
+select *
+from road
 order by total_trips desc

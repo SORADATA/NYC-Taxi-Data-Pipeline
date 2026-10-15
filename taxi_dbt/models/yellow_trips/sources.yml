@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: raw_nyc_taxi
+  - name: raw_yellow_trips
     description: "Données brutes des trajets de taxi jaunes de NYC chargées sur Supabase"
     database: postgres  # Nom de la base de données
     schema: public      # Schéma Supabase
