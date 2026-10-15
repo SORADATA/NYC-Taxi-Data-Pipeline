@@ -1,2 +1,8 @@
 config/
 profiles.yml
+data/
+*.duckdb
+*.duckdb.wal
+.git
+logs/
+target/
