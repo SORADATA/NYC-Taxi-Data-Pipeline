@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('yellow_taxi_nyc', 'raw_yellow_data') }}
+    select * from {{ source('raw_nyc_taxi', 'raw_yellow_trips') }}
 ),
 
 renamed as (
@@ -90,8 +90,6 @@ filtered as (
     where dropoff_datetime > pickup_datetime
       and trip_distance > 0
       and total_amount >= 0
-      and pickup_datetime >= '2025-01-01'
-      and pickup_datetime <  '2025-04-01'
 ),
 
 final as (

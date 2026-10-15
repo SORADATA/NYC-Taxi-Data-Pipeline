@@ -15,8 +15,9 @@ clean-targets:
 
 models:
   taxi_dbt:
-    yellow_trips:
-      staging:
-        +materialized: view
-      marts:
-        +materialized: table
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table

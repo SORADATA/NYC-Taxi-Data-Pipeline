@@ -11,7 +11,7 @@ zones as (
     select * from {{ref('stg_taxi_zones')}}
 ),
 
-routes as (
+road as (
     select
         t.pickup_location_id,
         pul.borough as pickup_borough,
@@ -33,5 +33,5 @@ routes as (
     group by 1, 2, 3, 4, 5, 6
 )
 
-select * from routes
+select * from road
 order by total_trips desc

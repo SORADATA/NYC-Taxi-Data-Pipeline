@@ -1,14 +1,10 @@
 version: 2
 
 sources:
-  - name: yellow_taxi_nyc
+  - name: raw_nyc_taxi
+    description: "Données brutes des trajets de taxi jaunes de NYC chargées sur Supabase"
+    database: postgres  # Nom de la base de données
+    schema: public      # Schéma Supabase
     tables:
-      - name: raw_yellow_data
-        meta:
-          external_location: >-
-            read_parquet(
-              list_transform(
-                range(1, 13),
-                m -> 'https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2025-' || lpad(m::VARCHAR, 2, '0') || '.parquet'
-              )
-            )
+      - name: raw_yellow_trips
+        description: "Table brute contenant les trajets 2026 Q1"

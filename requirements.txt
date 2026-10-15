@@ -1,4 +1,8 @@
-duckdb
+pandas
+pyarrow
 dbt-core
-dbt-duckdb
+dbt-bigquery
 requests
+sqlalchemy
+psycopg2-binary
+psycopg[binary]

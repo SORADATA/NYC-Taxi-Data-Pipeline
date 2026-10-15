@@ -61,6 +61,5 @@ def months_between(start: str, end: str) -> list[str]:
 
 
 if __name__ == "__main__":
-    download_months("2024-01", "2024-03")
-
-
+    # Télécharge par exemple les 3 premiers mois de l'année en cours
+    download_months("2026-01", "2026-03")

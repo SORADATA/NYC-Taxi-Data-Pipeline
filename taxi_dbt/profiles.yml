@@ -2,9 +2,12 @@ taxi_dbt:
   target: dev
   outputs:
     dev:
-      type: duckdb
-      path: ../taxi.duckdb
-      schema: main
+      type: postgres
+      host: aws-0-eu-west-1.pooler.supabase.com
+      user: postgres.aiiwawdgrlhicatqtrza
+      pass: "MBs91033344"
+      port: 6543
+      dbname: postgres
+      schema: public
       threads: 4
-      
-      
+      keepalives_idle: 240

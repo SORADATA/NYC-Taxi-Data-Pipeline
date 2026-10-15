@@ -1,58 +1,58 @@
-from google.cloud import bigquery, storage
-from process import process_nyc_yellow_taxi
-from actions import BUCKET_NAME, PROJECT_ID
-import pandas as pd
-import io
-import time
 import logging
+from pathlib import Path
 from datetime import datetime
+import pandas as pd
+from sqlalchemy import create_engine
+
+# Configuration du logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
+# URI de connexion Supabase (via le Connection Pooler)
+DATABASE_URL = "postgresql://postgres.aiiwawdgrlhicatqtrza:MBs91033344@aws-0-eu-west-1.pooler.supabase.com:6543/postgres"
 
 
-def load_to_bigquery(month: str = None) -> None:
+def load_to_supabase(month: str = None) -> None:
     """
-    Si month fourni (ex: '2024-01') → charge uniquement ce fichier
-    Sinon → charge le mois en cours
+    Lit le fichier Parquet local depuis data/raw/ et le charge
+    par lots optimisés dans la table PostgreSQL 'raw_yellow_trips' sur Supabase.
     """
     if month is None:
         month = datetime.now().strftime("%Y-%m")
 
-    client_gcs = storage.Client(project=PROJECT_ID)
-    client_bq = bigquery.Client(project=PROJECT_ID)
-    bucket = client_gcs.bucket(BUCKET_NAME)
+    file_path = Path(f"data/raw/yellow_tripdata_{month}.parquet")
 
-    table_id = f"{PROJECT_ID}.raw_yellowtrips.yellow_trips"
-    job_config = bigquery.LoadJobConfig(write_disposition="WRITE_APPEND")
-
-    #  Cible uniquement le fichier du mois
-    target = f"raw/yellow_tripdata_{month}.parquet"
-    blob = bucket.blob(target)
-
-    if not blob.exists():
-        print(f" Fichier introuvable : {target}")
+    if not file_path.exists():
+        logging.warning(f"Fichier local introuvable : {file_path}")
         return
 
     try:
-        print(f" Traitement : {target}")
-        data = blob.download_as_bytes()
-        df = pd.read_parquet(io.BytesIO(data))
-        df = process_nyc_yellow_taxi(df)
-        print(f" Transformé : {len(df)} lignes")
-
-        chunk_size = 500_000
-        for i in range(0, len(df), chunk_size):
-            chunk = df.iloc[i:i+chunk_size]
-            job = client_bq.load_table_from_dataframe(
-                chunk, table_id, job_config=job_config
-            )
-            job.result()
-
-        del df
-        print(f" Chargé dans BigQuery !")
-        logging.info(f"{target} chargé avec succès")
+        logging.info(f"Lecture de {file_path.name}...")
+        df = pd.read_parquet(file_path)
+        
+        logging.info(f"Chargement de {file_path.name} vers Supabase...")
+        engine = create_engine(DATABASE_URL)
+        
+        # Envoi par lots de 5000 lignes pour un équilibre parfait entre vitesse et stabilité réseau
+        df.to_sql(
+            "raw_yellow_trips", 
+            engine, 
+            if_exists="append", 
+            index=False,
+            method="multi",
+            chunksize=1000
+        )
+        
+        logging.info(f"Fichier {file_path.name} chargé avec succès dans Supabase !")
 
     except Exception as e:
-        print(f" ERREUR : {str(e)}")
+        logging.error(f"ERREUR lors du chargement de {file_path.name} : {str(e)}")
 
 
 if __name__ == "__main__":
-    load_to_bigquery()
+    months_to_load = ["2026-01", "2026-02", "2026-03"]
+    
+    for m in months_to_load:
+        load_to_supabase(m)
