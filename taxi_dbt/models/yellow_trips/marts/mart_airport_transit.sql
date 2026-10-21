@@ -24,12 +24,20 @@ airport_trips as (
         t.fare_amount,
         t.airport_fee,
         t.total_amount,
-        t.payment_method
-
+        t.payment_method,
+        case 
+            when pul.zone ilike '%jfk%' or dol.zone ilike '%jfk%' then 'JFK Airport'
+            when pul.zone ilike '%laguardia%' or dol.zone ilike '%laguardia%' then 'LaGuardia Airport'
+            when pul.zone ilike '%newark%' or dol.zone ilike '%newark%' then 'Newark Airport'
+            else 'Other Airport'
+        end as target_airport
     from trips t
     left join zones pul on t.pickup_location_id = pul.location_id
     left join zones dol on t.dropoff_location_id = dol.location_id
-    where pul.zone ilike '%airport%' or dol.zone ilike '%airport%'
+    where pul.zone ilike '%jfk%' or dol.zone ilike '%jfk%'
+       or pul.zone ilike '%laguardia%' or dol.zone ilike '%laguardia%'
+       or pul.zone ilike '%newark%' or dol.zone ilike '%newark%'
+       or pul.zone ilike '%airport%' or dol.zone ilike '%airport%'
 )
 
 select * from airport_trips
