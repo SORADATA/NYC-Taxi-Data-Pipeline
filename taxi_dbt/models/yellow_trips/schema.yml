@@ -5,17 +5,17 @@ models:
     description: "Données nettoyées et standardisées des trajets de yellow taxi de NYC."
     
     columns:
-      - name: pickup_at
+      - name: pickup_datetime
         description: "Date et heure de prise en charge du passager."
         data_tests:
           - not_null
 
-      - name: dropoff_at
+      - name: dropoff_datetime
         description: "Date et heure de dépose du passager."
         data_tests:
           - not_null
 
-      - name: distance_miles
+      - name: trip_distance
         description: "Distance totale du trajet en miles."
         data_tests:
           - not_null
