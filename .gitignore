@@ -1,8 +1,10 @@
 config/
 profiles.yml
 data/
+data/raw/
 *.duckdb
 *.duckdb.wal
 .git
 logs/
 target/
+.env

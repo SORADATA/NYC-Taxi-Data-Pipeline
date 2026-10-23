@@ -1,6 +1,6 @@
 with source as (
     select *
-    from {{ source('raw_yellow_trips', 'raw_yellow_trips') }}
+    from {{ source('raw', 'raw_yellow_trips') }}
 ),
 
 renamed as (

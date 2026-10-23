@@ -2,14 +2,12 @@ taxi_dbt:
   target: dev
   outputs:
     dev:
-      type: postgres
-      host: ep-green-water-b9l27axr.c-7.eu-central-1.aws.neon.tech
-      user: neondb_owner
-      password: "npg_3cG6SkXJEzaY"
-      port: 5432
-      dbname: neondb
-      schema: public
-      threads: 2
-      sslmode: require
-      connect_timeout: 30
-      keepalives_idle: 240
+      type: snowflake
+      account: "{{ env_var('DBT_SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('DBT_SNOWFLAKE_USER') }}"
+      password: "{{ env_var('DBT_SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('DBT_SNOWFLAKE_ROLE') }}"
+      database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
+      warehouse: "{{ env_var('DBT_SNOWFLAKE_WAREHOUSE') }}"
+      schema: PUBLIC
+      threads: 1

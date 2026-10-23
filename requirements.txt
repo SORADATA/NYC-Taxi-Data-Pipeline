@@ -7,3 +7,7 @@ sqlalchemy
 psycopg2-binary
 psycopg[binary]
 dbt-postgres
+dbt-snowflake
+snowflake-sqlalchemy
+snowflake-connector-python
+snowflake-connector-python[pandas]
