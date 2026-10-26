@@ -5,10 +5,10 @@ with source as (
 
 renamed as (
     select
-        cast("LocationID" as integer) as location_id,
-        cast("Borough" as varchar) as borough,
-        cast("Zone" as varchar) as zone,
-        cast(service_zone as varchar) as service_zone
+        cast("LOCATIONID" as integer) as location_id,
+        cast("BOROUGH" as varchar) as borough,
+        cast("ZONE" as varchar) as zone,
+        cast("SERVICE_ZONE" as varchar) as service_zone
     from source
 )
 
