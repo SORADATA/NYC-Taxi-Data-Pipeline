@@ -7,7 +7,7 @@ from pathlib import Path
 import requests
 import snowflake.connector
 from dotenv import load_dotenv
-from constants import BASE_URL, STAGE
+from constants import BASE_URL, STAGE, TARGET_MONTH
 
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
@@ -141,9 +141,14 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Télécharge un mois NYC Taxi vers un stage Snowflake."
     )
-    parser.add_argument("month", help="Mois au format YYYY-MM")
-    args = parser.parse_args()
 
+    parser.add_argument(
+        "month",
+        nargs="?",
+        default=TARGET_MONTH,
+        help=f"Mois au format YYYY-MM (par défaut : {TARGET_MONTH})",
+        )
+    args = parser.parse_args()
     month = args.month
 
     if not re.fullmatch(r"[0-9]{4}-(0[1-9]|1[0-2])", month):
