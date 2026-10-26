@@ -2,9 +2,9 @@ version: 2
 
 sources:
   - name: raw
-    description: "Données brutes des trajets de taxi jaunes de NYC chargées dans neon"
+    description: "Données brutes des trajets de taxi jaunes de NYC chargées dans snowflake"
     database: "{{ env_var('DBT_SNOWFLAKE_DATABASE') }}"
-    schema: public
+    schema: RAW
     tables:
       - name: raw_yellow_trips
         description: "Table brute contenant les trajets 2026 Q1"
