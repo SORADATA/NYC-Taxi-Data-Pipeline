@@ -8,5 +8,7 @@ data/raw/
 logs/
 target/
 .env
+venv/
+.venv/
 __pycache__/
 *.pyc
