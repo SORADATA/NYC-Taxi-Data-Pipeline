@@ -2,16 +2,16 @@
 WITH trip_metrics AS (
 
     SELECT
-        tpep_pickup_datetime,
-        tpep_dropoff_datetime,
+        pickup_datetime,
+        dropoff_datetime,
         fare_amount,
         total_amount,
         trip_distance,
 
         DATEDIFF(
             minute,
-            tpep_pickup_datetime,
-            tpep_dropoff_datetime
+            pickup_datetime,
+            dropoff_datetime
         ) AS duration_minutes
 
     FROM {{ ref('stg_trip') }}
@@ -23,8 +23,8 @@ trip_categories AS (
     SELECT
         *,
         CASE
-            WHEN tpep_pickup_datetime IS NULL
-              OR tpep_dropoff_datetime IS NULL
+            WHEN pickup_datetime IS NULL
+              OR dropoff_datetime IS NULL
                 THEN 'MISSING_TIME'
 
             WHEN duration_minutes < 0
