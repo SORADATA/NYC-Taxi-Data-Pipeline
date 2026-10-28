@@ -137,7 +137,7 @@ def upload_to_stage(file_path: Path, month: str) -> None:
         conn.close()
 
 
-def main() -> int:
+def main_extraction() -> int:
     parser = argparse.ArgumentParser(
         description="Télécharge un mois NYC Taxi vers un stage Snowflake."
     )
@@ -182,4 +182,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main_extraction())
